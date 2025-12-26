@@ -21,6 +21,8 @@ select,input{background:#1a1a1a;border:1px solid #333;color:#fff;padding:10px;bo
 .res-box.highlight{border-color:var(--orange);}
 .res-val{font-size:1.1rem;color:var(--orange);font-weight:bold;display:block;}
 .res-txt{font-size:0.55rem;color:#666;text-transform:uppercase;}
+.help-box{font-size:0.7rem;color:#aaa;line-height:1.4;border-top:1px solid #333;margin-top:10px;padding-top:10px;}
+.help-title{color:var(--orange);font-weight:bold;display:block;margin-bottom:4px;text-transform:uppercase;font-size:0.6rem;}
 table{width:100%;border-collapse:collapse;font-size:0.75rem;margin-top:5px;}
 th{background:#222;color:var(--orange);text-align:left;padding:8px;position:sticky;top:-1px;z-index:10;}
 td{padding:8px;border-bottom:1px solid #222;color:#ddd;}
@@ -41,32 +43,6 @@ td{padding:8px;border-bottom:1px solid #222;color:#ddd;}
 </div>
 
 <div class="content">
-
-    <div id="sec-cin" class="tab-content" style="display:none">
-        <div class="card">
-            <span class="label">Angle (degrés)</span>
-            <input id="cin-angle" type="number" value="90" oninput="calcCin()">
-            <span class="label">Rayon de cintrage (R)</span>
-            <input id="cin-rayon" type="number" placeholder="Rayon en mm" oninput="calcCin()">
-            <span class="label">Cote souhaitée (Axe)</span>
-            <input id="cin-cote" type="number" placeholder="Cote finale" oninput="calcCin()">
-            
-            <div class="res-grid">
-                <div class="res-box highlight">
-                    <span id="cin-dev" class="res-val">--</span>
-                    <span class="res-txt">Dév. Arc (mm)</span>
-                </div>
-                <div class="res-box">
-                    <span id="cin-mark" class="res-val">--</span>
-                    <span class="res-txt">Repère Début</span>
-                </div>
-            </div>
-            <p style="font-size:0.6rem; color:#888; margin-top:10px;">
-                * Swagelok : Utilisez le rayon spécifique de la réglette.<br>
-                * REMS/Mingori : Mesurez du centre du galet.
-            </p>
-        </div>
-    </div>
 
     <div id="sec-dec" class="tab-content">
         <div class="card">
@@ -108,17 +84,53 @@ td{padding:8px;border-bottom:1px solid #222;color:#ddd;}
         </div>
     </div>
 
-    <div id="sec-dw" class="tab-content" style="display:none">
+    <div id="sec-cin" class="tab-content" style="display:none">
         <div class="card">
-            <select id="dw-type" onchange="calcDW()">
-                <option value="90">90° Elbow (E9)</option><option value="45">45° Elbow (E4)</option><option value="tee">Tee (TE)</option>
+            <span class="label">Machine & Diamètre</span>
+            <select id="cin-preset" onchange="applyRadius()">
+                <option value="">-- Sélectionner l'outil --</option>
+                <optgroup label="REMS Curvo (Pouces)">
+                    <option value="45">1/4" - 3/8" (R=45)</option>
+                    <option value="50">1/2" (R=50)</option>
+                    <option value="63">5/8" (R=63)</option>
+                    <option value="82">3/4" (R=82)</option>
+                    <option value="102">7/8" (R=102)</option>
+                    <option value="115">1" (R=115)</option>
+                    <option value="127">1 1/8" (R=127)</option>
+                </optgroup>
+                <optgroup label="REMS Curvo (mm)">
+                    <option value="45">Ø12 (R=45)</option>
+                    <option value="55">Ø15 (R=55)</option>
+                    <option value="70">Ø18 (R=70)</option>
+                    <option value="77">Ø22 (R=77)</option>
+                    <option value="114">Ø28 (R=114)</option>
+                </optgroup>
+                <optgroup label="Swagelok (Inox)">
+                    <option value="14.3">1/4" (R=14.3)</option>
+                    <option value="23.8">3/8" (R=23.8)</option>
+                    <option value="38.1">1/2" (R=38.1)</option>
+                </optgroup>
+                <optgroup label="Mingori (Gaz)">
+                    <option value="60">3/8" (R=60)</option>
+                    <option value="80">1/2" (R=80)</option>
+                    <option value="110">3/4" (R=110)</option>
+                    <option value="140">1" (R=140)</option>
+                </optgroup>
             </select>
-            <select id="dw-od" onchange="calcDW()">
-                <option value="1/4">1/4"</option><option value="3/8">3/8"</option><option value="1/2">1/2"</option><option value="3/4">3/4"</option><option value="1">1"</option><option value="1.5">1-1/2"</option><option value="2">2"</option><option value="2.5">2-1/2"</option><option value="3">3"</option><option value="4">4"</option><option value="6">6"</option>
-            </select>
+            <span class="label">Angle (degrés)</span>
+            <input id="cin-angle" type="number" value="90" oninput="calcCin()">
+            <span class="label">Rayon R (mm)</span>
+            <input id="cin-rayon" type="number" placeholder="Rayon" oninput="calcCin()">
+            <span class="label">Cote d'Axe souhaitée (mm)</span>
+            <input id="cin-cote" type="number" placeholder="Cote finale" oninput="calcCin()">
             <div class="res-grid">
-                <div class="res-box"><span id="dw-l1" class="res-val">--</span><span class="res-txt">Encombrement</span></div>
-                <div class="res-box"><span id="dw-l3" class="res-val">--</span><span class="res-txt">Longueur droit</span></div>
+                <div class="res-box highlight"><span id="cin-dev" class="res-val">--</span><span class="res-txt">Dév. de l'Arc</span></div>
+                <div class="res-box highlight"><span id="cin-mark" class="res-val">--</span><span class="res-txt">Repère Début</span></div>
+            </div>
+            <div class="help-box">
+                <span class="help-title">Aide au cintrage</span>
+                <strong>Dév. Arc :</strong> Longueur consommée par le coude.<br>
+                <strong>Repère :</strong> Trace sur le tube à aligner sur le galet.
             </div>
         </div>
     </div>
@@ -135,6 +147,21 @@ td{padding:8px;border-bottom:1px solid #222;color:#ddd;}
             <div class="res-grid">
                 <div class="res-box highlight"><span id="fit-L" class="res-val">--</span><span class="res-txt">Encombrement</span></div>
                 <div class="res-box highlight"><span id="fit-Lx" class="res-val">--</span><span class="res-txt">Longueur droite</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sec-dw" class="tab-content" style="display:none">
+        <div class="card">
+            <select id="dw-type" onchange="calcDW()">
+                <option value="90">90° Elbow (E9)</option><option value="45">45° Elbow (E4)</option><option value="tee">Tee (TE)</option>
+            </select>
+            <select id="dw-od" onchange="calcDW()">
+                <option value="1/4">1/4"</option><option value="3/8">3/8"</option><option value="1/2">1/2"</option><option value="3/4">3/4"</option><option value="1">1"</option><option value="1.5">1-1/2"</option><option value="2">2"</option><option value="2.5">2-1/2"</option><option value="3">3"</option><option value="4">4"</option><option value="6">6"</option>
+            </select>
+            <div class="res-grid">
+                <div class="res-box"><span id="dw-l1" class="res-val">--</span><span class="res-txt">Encombrement</span></div>
+                <div class="res-box"><span id="dw-l3" class="res-val">--</span><span class="res-txt">Longueur droite</span></div>
             </div>
         </div>
     </div>
@@ -162,6 +189,8 @@ const ser_db = {"15":{e:20,z90:18,z45:7,zte:10},"18":{e:20,z90:22,z45:8,zte:11},
 const dw_db = {"90":{"1/4":{l1:66.7,l3:52.4},"3/8":{l1:66.7,l3:38.1},"1/2":{l1:76.2,l3:49.2},"3/4":{l1:76.2,l3:50.2},"1":{l1:76.2,l3:38.1},"2":{l1:120.7,l3:44.5},"4":{l1:203.2,l3:50.8}},"45":{"1/4":{l1:50.8,l3:0},"1/2":{l1:57.2,l3:0},"1":{l1:57.2,l3:0},"2":{l1:76.2,l3:0},"4":{l1:114.3,l3:0}},"tee":{"1/4":{l1:89,l3:44.5},"1/2":{l1:95.2,l3:47.6},"1":{l1:108,l3:54},"2":{l1:146,l3:73},"4":{l1:209.6,l3:104.8}}};
 const fit_db = {"90":{"1/4":{L:49,Lx:29},"1/2":{L:54,Lx:29},"1":{L:69,Lx:36},"2":{L:123,Lx:46}},"45":{"1/4":{L:38,Lx:29},"1/2":{L:40,Lx:29},"1":{L:50,Lx:36},"2":{L:78,Lx:46}},"tee":{"1/4":{L:70,Lx:35},"1/2":{L:78,Lx:39},"1":{L:110,Lx:55},"2":{L:154,Lx:77}}};
 
+function showTab(t){document.querySelectorAll(".tab-content").forEach(s=>s.style.display="none");document.getElementById("sec-"+t).style.display="block";document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));document.getElementById("btn-"+t).classList.add("active");if(t==='aba')filterAbaque();}
+function applyRadius(){const r=document.getElementById("cin-preset").value;if(r){document.getElementById("cin-rayon").value=r;calcCin();}}
 function calcCin(){
     const a = +document.getElementById("cin-angle").value;
     const r = +document.getElementById("cin-rayon").value;
@@ -169,19 +198,15 @@ function calcCin(){
     if(a && r){
         const dev = (Math.PI * r * a) / 180;
         document.getElementById("cin-dev").innerText = dev.toFixed(1);
-        if(c) {
-            const mark = c - r; // Point de début de cintrage standard
-            document.getElementById("cin-mark").innerText = mark.toFixed(1);
-        }
+        if(c) { document.getElementById("cin-mark").innerText = (c - r).toFixed(1); }
     }
 }
-function calcSer(){const d=ser_db[document.getElementById("ser-od").value],t=document.getElementById("ser-type").value;let z=(t==="90"?d.z90:(t==="45"?d.z45:(t==="te"?d.zte:2)));document.getElementById("ser-emb").innerText=d.e;document.getElementById("ser-z").innerText=z;}
-function applyIso(){const v=document.getElementById("sel-dec-iso").value;if(v!="0")document.getElementById("inp-dec-e").value=v;calcDec();}
 function calcDec(){const h=+document.getElementById("inp-dec-h").value,e=+document.getElementById("inp-dec-e").value||0;if(h>0){const a=Math.round(h*1.4142);document.getElementById("val-axe").innerText=a;document.getElementById("val-coupe").innerText=Math.max(0,a-(2*e));}}
+function applyIso(){const v=document.getElementById("sel-dec-iso").value;if(v!="0")document.getElementById("inp-dec-e").value=v;calcDec();}
+function calcSer(){const d=ser_db[document.getElementById("ser-od").value],t=document.getElementById("ser-type").value;let z=(t==="90"?d.z90:(t==="45"?d.z45:(t==="te"?d.zte:2)));document.getElementById("ser-emb").innerText=d.e;document.getElementById("ser-z").innerText=z;}
 function calcDW(){const t=document.getElementById("dw-type").value,d=dw_db[t][document.getElementById("dw-od").value]||{l1:0,l3:0};document.getElementById("dw-l1").innerText=d.l1;document.getElementById("dw-l3").innerText=t==="45"?"---":d.l3;}
 function calcFit(){const t=document.getElementById("fit-type").value,o=document.getElementById("fit-od").value,d=fit_db[t][o]||{L:0,Lx:0};document.getElementById("fit-L").innerText=d.L;document.getElementById("fit-Lx").innerText=d.Lx;}
 function filterAbaque(){const n=document.getElementById("sel-norme").value,q=document.getElementById("aba-search").value.toLowerCase(),h=n==='iso'?["DN","Ext","Ep"]:["Size","OD","Ep"];document.getElementById("thr").innerHTML=h.map(x=>`<th>${x}</th>`).join('');document.getElementById("abaque-body").innerHTML=dataAba[n].filter(r=>r.some(c=>c.toLowerCase().includes(q))).map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');}
-function showTab(t){document.querySelectorAll(".tab-content").forEach(s=>s.style.display="none");document.getElementById("sec-"+t).style.display="block";document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));document.getElementById("btn-"+t).classList.add("active");if(t==='aba')filterAbaque();}
 window.onload=()=>{calcSer();calcDW();calcFit();filterAbaque();};
 </script>
 </body>

@@ -2,202 +2,204 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rabbit PipeFit Pro</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Rabbit PipeFit Pro - Dockweiler Edition</title>
 <style>
-:root{--orange:#ff4e00;--bg:#000;--card:#111;--text:#fff}
-body{margin:0;background:var(--bg);color:var(--text);font-family:sans-serif}
-.header{text-align:center;padding:8px;border-bottom:2px solid var(--orange);font-weight:bold}
-.tabs{display:flex;height:42px;background:#111}
-.tab-btn{flex:1;border:none;background:none;color:#666;font-size:.6rem;font-weight:bold}
-.tab-btn.active{color:var(--orange);border-bottom:2px solid var(--orange)}
-.content{padding:10px;height:calc(100vh - 84px);overflow:auto}
-.card{background:var(--card);border:1px solid #333;border-radius:12px;padding:12px;margin-bottom:10px}
-.label{font-size:.6rem;color:#888;display:block;margin-bottom:4px}
-input,select{width:100%;padding:8px;background:#222;border:1px solid #444;color:white;border-radius:8px;margin-bottom:8px}
-.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.res-box{background:#000;border:1px solid var(--orange);border-radius:8px;padding:8px;text-align:center}
-.res-val{font-size:1.3rem;color:var(--orange);font-weight:bold}
-.res-txt{font-size:.55rem;color:#888}
-table{width:100%;border-collapse:collapse;font-size:.6rem}
-th{position:sticky;top:0;background:#000;color:var(--orange);padding:4px}
-td{padding:4px;border-bottom:1px solid #222}
+:root{--orange:#ff4e00;--bg:#000;--card:#111;--text:#fff;}
+body{margin:0;font-family:sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
+.header{padding:10px;text-align:center;font-weight:bold;border-bottom:2px solid var(--orange);font-size:0.85rem;}
+.tabs{display:flex;background:#111;border-bottom:1px solid #333;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.tab-btn{flex:0 0 auto;border:none;padding:12px 14px;font-size:0.6rem;color:#666;background:none;cursor:pointer;white-space:nowrap;}
+.tab-btn.active{color:var(--orange);border-bottom:2px solid var(--orange);background:#1a1a1a;}
+.content{height:calc(100vh - 90px);overflow-y:auto;padding:10px;box-sizing:border-box;}
+.card{background:var(--card);border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid #333;}
+.label{font-size:0.55rem;color:#888;text-transform:uppercase;margin-bottom:4px;display:block;letter-spacing:1px;}
+select,input{background:#222;border:1px solid #444;color:#fff;padding:10px;border-radius:8px;width:100%;margin-bottom:10px;font-size:0.95rem;box-sizing:border-box;}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:5px;}
+.res-box{text-align:center;background:#000;border:1px solid var(--orange);border-radius:6px;padding:8px;}
+.res-val{font-size:1.1rem;color:var(--orange);font-weight:bold;display:block;}
+.res-txt{font-size:0.5rem;color:#888;text-transform:uppercase;}
+table{width:100%;border-collapse:collapse;font-size:0.75rem;}
+th{background:#222;color:var(--orange);text-align:left;padding:8px;border-bottom:1px solid #444;position:sticky;top:0;}
+td{padding:8px;border-bottom:1px solid #222;}
+.search-box{border:1px solid var(--orange) !important; margin-bottom:10px;}
 </style>
 </head>
-
 <body>
 
-<div class="header">PIPEFIT PRO – RABBIT R1</div>
+<div class="header">PIPEFIT PRO : DOCKWEILER & FITOK</div>
 
 <div class="tabs">
-  <button id="t-dec" class="tab-btn active" onclick="showTab('dec')">Décroché</button>
-  <button id="t-coude" class="tab-btn" onclick="showTab('coude')">Coude</button>
-  <button id="t-aba" class="tab-btn" onclick="showTab('aba')">Abaques</button>
+    <button id="btn-dec" class="tab-btn active" onclick="showTab('dec')">Décroché</button>
+    <button id="btn-dw" class="tab-btn" onclick="showTab('dw')">Dockweiler</button>
+    <button id="btn-fit" class="tab-btn" onclick="showTab('fit')">Fitok</button>
+    <button id="btn-enc" class="tab-btn" onclick="showTab('enc')">ISO 90°</button>
+    <button id="btn-aba" class="tab-btn" onclick="showTab('aba')">Abaques</button>
 </div>
 
 <div class="content">
 
-<!-- DECROCHÉ SIMPLIFIÉ -->
-<div id="sec-dec">
-  <div class="card">
-    <span class="label">Diamètre (DN)</span>
-    <select id="dec-dn" onchange="calcDec()"></select>
-
-    <span class="label">Hauteur du décroché H (mm)</span>
-    <input type="number" id="dec-h" oninput="calcDec()">
-
-    <div class="res-grid">
-      <div class="res-box">
-        <span id="dec-aa" class="res-val">--</span>
-        <span class="res-txt">Axe-Axe</span>
-      </div>
-      <div class="res-box">
-        <span id="dec-cut" class="res-val">--</span>
-        <span class="res-txt">Coupe tube</span>
-      </div>
+    <div id="sec-dec" class="tab-content">
+        <div class="card">
+            <span class="label">Hauteur H (mm)</span>
+            <input id="inp-dec-h" type="number" oninput="calcDec()" placeholder="Entrer H">
+            <span class="label">Encombrement Lx coude (mm)</span>
+            <input id="inp-dec-e" type="number" oninput="calcDec()" placeholder="Ex: 29">
+            <div class="res-grid">
+                <div class="res-box"><span id="val-axe" class="res-val">--</span><span class="res-txt">Axe‑Axe</span></div>
+                <div class="res-box"><span id="val-coupe" class="res-val">--</span><span class="res-txt">Tube à couper</span></div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- COUDE -->
-<div id="sec-coude" style="display:none">
-  <div class="card">
-    <span class="label">Diamètre (DN)</span>
-    <select id="c-dn" onchange="calcCoude()"></select>
-
-    <span class="label">Angle</span>
-    <select id="c-a" onchange="calcCoude()">
-      <option value="90">90°</option>
-      <option value="45">45°</option>
-    </select>
-
-    <div class="res-grid">
-      <div class="res-box">
-        <span id="c-res" class="res-val">--</span>
-        <span class="res-txt">Encombrement (mm)</span>
-      </div>
-      <div class="res-box">
-        <span class="res-val">R = 1.5D</span>
-        <span class="res-txt">Standard atelier</span>
-      </div>
+    <div id="sec-dw" class="tab-content" style="display:none">
+        <div class="card">
+            <span class="label">Composant Dockweiler</span>
+            <select id="dw-type" onchange="calcDW()">
+                <option value="90">90° Elbow (E9)</option>
+                <option value="45">45° Elbow (E4)</option>
+                <option value="tee">Tee (TE)</option>
+            </select>
+            <span class="label">Diamètre (Inch)</span>
+            <select id="dw-od" onchange="calcDW()">
+                <option value="1/4">1/4"</option><option value="3/8">3/8"</option><option value="1/2">1/2"</option>
+                <option value="3/4">3/4"</option><option value="1">1"</option><option value="1.5">1-1/2"</option>
+                <option value="2">2"</option><option value="2.5">2-1/2"</option><option value="3">3"</option>
+                <option value="4">4"</option><option value="6">6"</option>
+            </select>
+            <div class="res-grid">
+                <div class="res-box"><span id="dw-l1" class="res-val">--</span><span id="dw-lbl-l1" class="res-txt">l1 (mm)</span></div>
+                <div class="res-box"><span id="dw-l3" class="res-val">--</span><span id="dw-lbl-l3" class="res-txt">l3 (mm)</span></div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- ABAQUES -->
-<div id="sec-aba" style="display:none">
-  <select id="sel-norme" onchange="renderAbaque()">
-    <option value="iso">ISO / EN Acier</option>
-    <option value="asme">ASME B36 (Sch)</option>
-  </select>
+    <div id="sec-fit" class="tab-content" style="display:none">
+        <div class="card">
+            <span class="label">Composant Fitok</span>
+            <select id="fit-type" onchange="calcFit()">
+                <option value="90">90° Elbow</option><option value="45">45° Elbow</option><option value="tee">Tee</option>
+            </select>
+            <span class="label">Diamètre (Inch)</span>
+            <select id="fit-od" onchange="calcFit()">
+                <option value="1/4">1/4"</option><option value="3/8">3/8"</option><option value="1/2">1/2"</option>
+                <option value="3/4">3/4"</option><option value="1">1"</option><option value="1.5">1-1/2"</option><option value="2">2"</option>
+            </select>
+            <div class="res-grid">
+                <div class="res-box"><span id="fit-L" class="res-val">--</span><span class="res-txt">L Total (mm)</span></div>
+                <div class="res-box"><span id="fit-Lx" class="res-val">--</span><span class="res-txt">Lx Axe (mm)</span></div>
+            </div>
+        </div>
+    </div>
 
-  <div class="card" style="padding:0">
-    <table>
-      <thead><tr id="thr"></tr></thead>
-      <tbody id="tbody"></tbody>
-    </table>
-  </div>
-</div>
+    <div id="sec-enc" class="tab-content" style="display:none">
+        <div class="card">
+            <span class="label">Tube OD (mm) ISO</span>
+            <select id="sel-enc-d" onchange="calcEnc()">
+                <option value="17.2">17.2</option><option value="21.3">21.3</option><option value="26.9">26.9</option>
+                <option value="33.7">33.7</option><option value="42.4">42.4</option><option value="48.3">48.3</option>
+                <option value="60.3">60.3</option><option value="76.1">76.1</option><option value="88.9">88.9</option>
+                <option value="114.3">114.3</option><option value="139.7">139.7</option><option value="168.3">168.3</option>
+            </select>
+            <div class="res-grid">
+                <div class="res-box"><span id="val-enc-90" class="res-val">--</span><span class="res-txt">Enc. 90° ISO (mm)</span></div>
+            </div>
+        </div>
+    </div>
 
+    <div id="sec-aba" class="tab-content" style="display:none">
+        <div class="card">
+            <select id="sel-norme" onchange="filterAbaque()">
+                <option value="iso">ISO 4200 (DN15-DN600)</option>
+                <option value="bpe">ASME BPE (Full)</option>
+            </select>
+            <input type="text" id="aba-search" class="search-box" placeholder="Recherche..." onkeyup="filterAbaque()">
+            <table id="aba-table">
+                <thead><tr id="thr"></tr></thead>
+                <tbody id="abaque-body"></tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script>
-/* ---------- DONNÉES DIAMÈTRES COMPLETS ---------- */
-const diametresISO = [
- {dn:"DN10",od:17.2,e:20},
- {dn:"DN15",od:21.3,e:25},
- {dn:"DN20",od:26.9,e:30},
- {dn:"DN25",od:33.7,e:35},
- {dn:"DN32",od:42.4,e:40},
- {dn:"DN40",od:48.3,e:45},
- {dn:"DN50",od:60.3,e:55},
- {dn:"DN65",od:76.1,e:65},
- {dn:"DN80",od:88.9,e:75},
- {dn:"DN100",od:114.3,e:90},
- {dn:"DN125",od:139.7,e:110},
- {dn:"DN150",od:168.3,e:130},
- {dn:"DN200",od:219.1,e:170},
- {dn:"DN250",od:273.0,e:210},
- {dn:"DN300",od:323.9,e:250},
- {dn:"DN350",od:355.6,e:280},
- {dn:"DN400",od:406.4,e:320},
- {dn:"DN450",od:457.0,e:360},
- {dn:"DN500",od:508.0,e:400},
- {dn:"DN600",od:610.0,e:480}
-];
-
-/* ---------- ONGLET ---------- */
-function showTab(t){
- ['dec','coude','aba'].forEach(s=>{
-  document.getElementById('sec-'+s).style.display='none';
-  document.getElementById('t-'+s).classList.remove('active');
- });
- document.getElementById('sec-'+t).style.display='block';
- document.getElementById('t-'+t).classList.add('active');
- if(t==='aba') renderAbaque();
-}
-
-/* ---------- INIT SELECT ---------- */
-function initSelects(){
- const decSel=document.getElementById('dec-dn');
- const cSel=document.getElementById('c-dn');
- diametresISO.forEach(d=>{
-  decSel.innerHTML+=`<option value="${d.dn}">${d.dn} (Ø${d.od})</option>`;
-  cSel.innerHTML+=`<option value="${d.dn}">${d.dn} (Ø${d.od})</option>`;
- });
-}
-
-/* ---------- DECROCHÉ SIMPLIFIÉ ---------- */
-function calcDec(){
- const dn=document.getElementById('dec-dn').value;
- const h=Number(document.getElementById('dec-h').value);
- if(!h) return;
- const d=diametresISO.find(x=>x.dn===dn);
- const aa=Math.round(h*1.414);
- const cut=Math.max(aa-(2*d.e),0);
- document.getElementById('dec-aa').innerText=aa;
- document.getElementById('dec-cut').innerText=cut;
-}
-
-/* ---------- COUDE ---------- */
-function calcCoude(){
- const dn=document.getElementById('c-dn').value;
- const a=document.getElementById('c-a').value;
- const d=diametresISO.find(x=>x.dn===dn);
- const r=1.5*d.od;
- document.getElementById('c-res').innerText=
-  a==="90"?Math.round(r):Math.round(r/2);
-}
-
-/* ---------- ABAQUES ---------- */
-const bigData={
- iso:{
-  h:["DN","Ø ext mm","Pouce"],
-  d:diametresISO.map(d=>[d.dn,d.od,(d.od/25.4).toFixed(2)])
- },
- asme:{
-  h:["NPS","Ø ext mm","Pouce"],
-  d:[
-   ["1/2","21.34","0.5"],["1","33.4","1"],["2","60.3","2"],
-   ["4","114.3","4"],["6","168.3","6"],["8","219.1","8"],
-   ["10","273.0","10"],["12","323.9","12"],["16","406.4","16"],
-   ["20","508.0","20"],["24","610.0","24"]
-  ]
- }
+// Données Dockweiler extraites des photos
+const dwData = {
+    "90": { // E9
+        "1/4":{l1:66.7,l3:52.4},"3/8":{l1:66.7,l3:38.1},"1/2":{l1:76.2,l3:49.2},"3/4":{l1:76.2,l3:50.2},"1":{l1:76.2,l3:38.1},
+        "1.5":{l1:95.3,l3:38.1},"2":{l1:120.7,l3:44.5},"2.5":{l1:139.7,l3:44.4},"3":{l1:158.8,l3:44.5},"4":{l1:203.2,l3:50.8},"6":{l1:292.1,l3:63.5}
+    },
+    "45": { // E4
+        "1/4":{l1:50.8,l3:0},"3/8":{l1:50.8,l3:0},"1/2":{l1:57.2,l3:0},"3/4":{l1:57.2,l3:0},"1":{l1:57.2,l3:0},
+        "1.5":{l1:63.5,l3:0},"2":{l1:76.2,l3:0},"2.5":{l1:85.7,l3:0},"3":{l1:92.1,l3:0},"4":{l1:114.3,l3:0},"6":{l1:158.8,l3:0}
+    },
+    "tee": { // TE
+        "1/4":{l1:89,l3:44.5},"3/8":{l1:89,l3:44.5},"1/2":{l1:95.2,l3:47.6},"3/4":{l1:101.6,l3:50.8},"1":{l1:108,l3:54},
+        "1.5":{l1:120.6,l3:60.3},"2":{l1:146,l3:73},"2.5":{l1:158.8,l3:79.4},"3":{l1:171.4,l3:85.7},"4":{l1:209.6,l3:104.8},"6":{l1:285.8,l3:142.9}
+    }
 };
 
-function renderAbaque(){
- const n=document.getElementById('sel-norme').value;
- document.getElementById('thr').innerHTML=
-  bigData[n].h.map(h=>`<th>${h}</th>`).join('');
- document.getElementById('tbody').innerHTML=
-  bigData[n].d.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');
+const fitData = { // Données Fitok
+    "90": {"1/4":{L:49,Lx:29},"3/8":{L:52,Lx:29},"1/2":{L:54,Lx:29},"3/4":{L:66,Lx:36},"1":{L:69,Lx:36},"1.5":{L:104,Lx:46},"2":{L:123,Lx:46}},
+    "45": {"1/4":{L:38,Lx:29},"3/8":{L:39,Lx:29},"1/2":{L:40,Lx:29},"3/4":{L:49,Lx:36},"1":{L:50,Lx:36},"1.5":{L:70,Lx:46},"2":{L:78,Lx:46}},
+    "tee": {"1/4":{L:70,Lx:35},"3/8":{L:74,Lx:37},"1/2":{L:78,Lx:39},"3/4":{L:104,Lx:52},"1":{L:110,Lx:55},"1.5":{L:148,Lx:74},"2":{L:154,Lx:77}}
+};
+
+const iso90 = {"17.2":38,"21.3":38,"26.9":38,"33.7":38,"42.4":48,"48.3":57,"60.3":76,"76.1":95,"88.9":114,"114.3":152,"139.7":190,"168.3":229};
+
+const dataAba = {
+    iso: [["15","21.3","2.0"],["20","26.9","2.3"],["25","33.7","2.6"],["32","42.4","2.9"],["40","48.3","3.0"],["50","60.3","3.6"],["100","114.3","5.0"],["200","219.1","7.0"],["600","610.0","11.0"]],
+    bpe: [["1/4","6.35","0.89"],["3/8","9.53","0.89"],["1/2","12.70","1.65"],["3/4","19.05","1.65"],["1","25.40","1.65"],["1.5","38.10","1.65"],["2","50.80","1.65"],["3","76.20","1.65"],["4","101.60","2.11"],["6","152.40","2.77"]]
+};
+
+function showTab(t){
+    document.querySelectorAll(".tab-content").forEach(s=>s.style.display="none");
+    document.getElementById("sec-"+t).style.display="block";
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+    document.getElementById("btn-"+t).classList.add("active");
+    if(t==='aba') filterAbaque();
 }
 
-window.onload=initSelects;
-</script>
+function calcDec(){
+    const h = +document.getElementById("inp-dec-h").value;
+    const e = +document.getElementById("inp-dec-e").value || 0;
+    if(h>0){
+        const axe = Math.round(h * 1.414);
+        document.getElementById("val-axe").innerText = axe;
+        document.getElementById("val-coupe").innerText = Math.max(0, axe - (2*e));
+    }
+}
 
+function calcDW(){
+    const type = document.getElementById("dw-type").value;
+    const val = dwData[type][document.getElementById("dw-od").value];
+    document.getElementById("dw-l1").innerText = val.l1;
+    document.getElementById("dw-l3").innerText = type === "45" ? "---" : val.l3;
+    document.getElementById("dw-lbl-l1").innerText = type === "tee" ? "l3 (Total)" : "l1 (Total)";
+    document.getElementById("dw-lbl-l3").innerText = type === "tee" ? "l2 (Axe)" : "l3 (Axe)";
+}
+
+function calcFit(){
+    const val = fitData[document.getElementById("fit-type").value][document.getElementById("fit-od").value];
+    document.getElementById("fit-L").innerText = val.L;
+    document.getElementById("fit-Lx").innerText = val.Lx;
+}
+
+function calcEnc(){
+    const od = document.getElementById("sel-enc-d").value;
+    document.getElementById("val-enc-90").innerText = iso90[od] || "--";
+}
+
+function filterAbaque(){
+    const n = document.getElementById("sel-norme").value;
+    const q = document.getElementById("aba-search").value.toLowerCase();
+    const head = n==='iso' ? ["DN","Ext","Ep"] : ["Size","OD","Ep"];
+    document.getElementById("thr").innerHTML = head.map(h=>`<th>${h}</th>`).join('');
+    const filtered = dataAba[n].filter(r => r.some(c => c.toLowerCase().includes(q)));
+    document.getElementById("abaque-body").innerHTML = filtered.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');
+}
+
+window.onload = () => { calcEnc(); calcDW(); calcFit(); };
+</script>
 </body>
 </html>
-

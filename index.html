@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        :root { --orange: #ff4e00; --bg: #000; --card: #111; --text: #fff; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; overflow: hidden; }
+        
+        .header { background: #000; border-bottom: 2px solid var(--orange); padding: 10px; text-align: center; }
+        .tabs { display: flex; height: 40px; background: #111; }
+        .tab-btn { flex: 1; border: none; background: none; color: #666; font-size: 0.7rem; font-weight: bold; }
+        .tab-btn.active { color: var(--orange); border-bottom: 2px solid var(--orange); }
+
+        .content { height: calc(100vh - 90px); overflow-y: auto; padding: 15px; }
+        
+        /* Affichage Gros Résultats */
+        .res-card { background: var(--card); border-radius: 15px; padding: 20px; border: 1px solid #333; text-align: center; margin-bottom: 15px; }
+        .res-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
+        .res-value { font-size: 3.5rem; color: var(--orange); font-weight: bold; margin: 5px 0; }
+        .res-sub { font-size: 1rem; color: #ccc; }
+
+        /* Tableau Abaque */
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { color: var(--orange); text-align: left; padding: 8px; border-bottom: 1px solid #333; }
+        td { padding: 8px; border-bottom: 1px solid #222; }
+        .highlight { color: var(--orange); font-weight: bold; }
+
+        .fab-refresh { position: fixed; bottom: 15px; right: 15px; width: 45px; height: 45px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <span style="font-weight: bold; letter-spacing: 2px;">RABBIT PIPEFIT v1.0</span>
+    </div>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('calc')">CALCULS</button>
+        <button class="tab-btn" onclick="showTab('abaque')">ISO / GAZ</button>
+    </div>
+
+    <div id="main-content" class="content">
+        <div id="sec-calc">
+            <div class="res-card">
+                <div class="res-label">Calcul de Dévoiement (45°)</div>
+                <div id="offset-val" class="res-value">---</div>
+                <div id="offset-detail" class="res-sub">Entrez la plongée via PTT</div>
+            </div>
+            <p style="font-size: 0.7rem; color: #666; text-align: center;">Dites: "Rabbit, calcule dévoiement pour 300 de plongée"</p>
+        </div>
+
+        <div id="sec-abaque" style="display:none;">
+            <table>
+                <thead>
+                    <tr><th>DN</th><th>Ext. mm</th><th>Série</th></tr>
+                </thead>
+                <tbody id="abaque-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button class="fab-refresh" onclick="location.reload()">🔄</button>
+
+    <script>
+        const tubeData = [
+            {dn: "15", ext: "21.3", serie: "1/2\""},
+            {dn: "20", ext: "26.9", serie: "3/4\""},
+            {dn: "25", ext: "33.7", serie: "1\""},
+            {dn: "32", ext: "42.4", serie: "1\"1/4"},
+            {dn: "40", ext: "48.3", serie: "1\"1/2"},
+            {dn: "50", ext: "60.3", serie: "2\""},
+            {dn: "65", ext: "76.1", serie: "2\"1/2"},
+            {dn: "80", ext: "88.9", serie: "3\""},
+            {dn: "100", ext: "114.3", serie: "4\""}
+        ];
+
+        function showTab(t) {
+            document.getElementById('sec-calc').style.display = (t === 'calc') ? 'block' : 'none';
+            document.getElementById('sec-abaque').style.display = (t === 'abaque') ? 'block' : 'none';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function renderAbaque() {
+            const body = document.getElementById('abaque-body');
+            body.innerHTML = tubeData.map(t => `
+                <tr><td>DN ${t.dn}</td><td class="highlight">${t.ext}</td><td>${t.serie}</td></tr>
+            `).join('');
+        }
+
+        // Fonction de calcul trigonométrique (Offset 45°)
+        // L = Plongée * 1.414
+        function calculateOffset(plongee) {
+            const result = Math.round(plongee * 1.414);
+            document.getElementById('offset-val').innerText = result + " mm";
+            document.getElementById('offset-detail').innerText = "Tube à couper pour plongée de " + plongee + "mm";
+            
+            // Notification vocale via Rabbit
+            if (typeof PluginMessageHandler !== 'undefined') {
+                PluginMessageHandler.postMessage(JSON.stringify({
+                    message: "La longueur du tube est de " + result + " millimètres.",
+                    useLLM: false
+                }));
+            }
+        }
+
+        window.onload = () => {
+            renderAbaque();
+            // Simuler un calcul si le Rabbit passe un paramètre
+            window.addEventListener('message', (e) => {
+                // Ici on pourrait parser la commande vocale
+            });
+        };
+    </script>
+</body>
+</html>

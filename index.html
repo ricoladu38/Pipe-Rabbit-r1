@@ -6,15 +6,15 @@
 <title>Rabbit PipeFit Pro</title>
 
 <style>
-:root { --orange:#ff4e00; --bg:#000; --card:#111; --text:#fff; }
+:root{--orange:#ff4e00;--bg:#000;--card:#111;--text:#fff}
 body{margin:0;background:var(--bg);color:var(--text);font-family:sans-serif}
-.header{padding:8px;text-align:center;border-bottom:2px solid var(--orange);font-weight:bold}
+.header{text-align:center;padding:8px;border-bottom:2px solid var(--orange);font-weight:bold}
 .tabs{display:flex;height:42px;background:#111}
 .tab-btn{flex:1;border:none;background:none;color:#666;font-size:.6rem;font-weight:bold}
 .tab-btn.active{color:var(--orange);border-bottom:2px solid var(--orange)}
 .content{padding:10px;height:calc(100vh - 84px);overflow:auto}
 .card{background:var(--card);border:1px solid #333;border-radius:12px;padding:12px;margin-bottom:10px}
-.label{font-size:.6rem;color:#888;margin-bottom:4px;display:block}
+.label{font-size:.6rem;color:#888;display:block;margin-bottom:4px}
 input,select{width:100%;padding:8px;background:#222;border:1px solid #444;color:white;border-radius:8px;margin-bottom:8px}
 .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .res-box{background:#000;border:1px solid var(--orange);border-radius:8px;padding:8px;text-align:center}
@@ -31,10 +31,10 @@ td{padding:5px;border-bottom:1px solid #222}
 <div class="header">PIPEFIT PRO – RABBIT R1</div>
 
 <div class="tabs">
-  <button class="tab-btn active" id="t-dec" onclick="showTab('dec')">Décroché</button>
-  <button class="tab-btn" id="t-sert" onclick="showTab('sert')">Sertinox</button>
-  <button class="tab-btn" id="t-coude" onclick="showTab('coude')">Coude</button>
-  <button class="tab-btn" id="t-aba" onclick="showTab('aba')">Abaques</button>
+  <button id="t-dec" class="tab-btn active" onclick="showTab('dec')">Décroché</button>
+  <button id="t-sert" class="tab-btn" onclick="showTab('sert')">Sertinox</button>
+  <button id="t-coude" class="tab-btn" onclick="showTab('coude')">Coude</button>
+  <button id="t-aba" class="tab-btn" onclick="showTab('aba')">Abaques</button>
 </div>
 
 <div class="content">
@@ -47,8 +47,14 @@ td{padding:5px;border-bottom:1px solid #222}
     <span class="label">Encombrement 1 coude (mm)</span>
     <input type="number" id="dec-e" oninput="calcDec()">
     <div class="res-grid">
-      <div class="res-box"><span id="dec-aa" class="res-val">--</span><span class="res-txt">Axe-Axe</span></div>
-      <div class="res-box"><span id="dec-cut" class="res-val">--</span><span class="res-txt">Coupe tube</span></div>
+      <div class="res-box">
+        <span id="dec-aa" class="res-val">--</span>
+        <span class="res-txt">Axe-Axe</span>
+      </div>
+      <div class="res-box">
+        <span id="dec-cut" class="res-val">--</span>
+        <span class="res-txt">Coupe tube</span>
+      </div>
     </div>
   </div>
 </div>
@@ -66,8 +72,14 @@ td{padding:5px;border-bottom:1px solid #222}
       <option value="54,35">Ø54</option>
     </select>
     <div class="res-grid">
-      <div class="res-box"><span id="sert-a" class="res-val">--</span><span class="res-txt">Axe</span></div>
-      <div class="res-box"><span id="sert-e" class="res-val">--</span><span class="res-txt">Emboîtement</span></div>
+      <div class="res-box">
+        <span id="sert-a" class="res-val">--</span>
+        <span class="res-txt">Axe</span>
+      </div>
+      <div class="res-box">
+        <span id="sert-e" class="res-val">--</span>
+        <span class="res-txt">Emboîtement</span>
+      </div>
     </div>
   </div>
 </div>
@@ -83,95 +95,105 @@ td{padding:5px;border-bottom:1px solid #222}
       <option value="45">45°</option>
     </select>
     <div class="res-grid">
-      <div class="res-box"><span id="c-res" class="res-val">--</span><span class="res-txt">Encombrement</span></div>
-      <div class="res-box"><span class="res-val">R=1.5D</span><span class="res-txt">Standard</span></div>
+      <div class="res-box">
+        <span id="c-res" class="res-val">--</span>
+        <span class="res-txt">Encombrement (mm)</span>
+      </div>
+      <div class="res-box">
+        <span class="res-val">R = 1.5D</span>
+        <span class="res-txt">Standard</span>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- ABAQUES -->
 <div id="sec-aba" style="display:none">
-<select id="sel-norme" onchange="renderAbaque()">
-  <option value="iso">ISO / EN</option>
-  <option value="asme">ASME Sch</option>
-  <option value="inox">Inox EN</option>
-  <option value="cuivre">Cuivre</option>
-  <option value="bpe">ASME BPE</option>
-</select>
-<div class="card" style="padding:0">
-<table>
-<thead><tr id="thr"></tr></thead>
-<tbody id="tbody"></tbody>
-</table>
-</div>
+  <select id="sel-norme" onchange="renderAbaque()">
+    <option value="iso">ISO / EN Acier</option>
+    <option value="asme">ASME Sch</option>
+    <option value="inox">Inox EN</option>
+    <option value="cuivre">Cuivre</option>
+    <option value="bpe">ASME BPE</option>
+  </select>
+
+  <div class="card" style="padding:0">
+    <table>
+      <thead><tr id="thr"></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
 </div>
 
 </div>
 
 <script>
 function showTab(t){
-['dec','sert','coude','aba'].forEach(s=>{
-document.getElementById('sec-'+s).style.display='none';
-document.getElementById('t-'+s).classList.remove('active');
-});
-document.getElementById('sec-'+t).style.display='block';
-document.getElementById('t-'+t).classList.add('active');
-if(t==='aba')renderAbaque();
+  ['dec','sert','coude','aba'].forEach(s=>{
+    document.getElementById('sec-'+s).style.display='none';
+    document.getElementById('t-'+s).classList.remove('active');
+  });
+  document.getElementById('sec-'+t).style.display='block';
+  document.getElementById('t-'+t).classList.add('active');
+  if(t==='aba') renderAbaque();
 }
 
 function calcDec(){
-let h=+dec-h.value,e=+dec-e.value||0;
-if(h){
-let aa=Math.round(h*1.414);
-dec-aa.innerText=aa;
-dec-cut.innerText=Math.max(aa-2*e,0);
-}}
+  const h = Number(document.getElementById('dec-h').value);
+  const e = Number(document.getElementById('dec-e').value)||0;
+  if(!h) return;
+  const aa = Math.round(h*1.414);
+  document.getElementById('dec-aa').innerText = aa;
+  document.getElementById('dec-cut').innerText = Math.max(aa-2*e,0);
+}
 
 function calcSert(){
-let v=sert-d.value.split(',');
-sert-a.innerText=Math.round(v[0]*1.3);
-sert-e.innerText=v[1];
+  const v = document.getElementById('sert-d').value.split(',');
+  document.getElementById('sert-a').innerText = Math.round(v[0]*1.3);
+  document.getElementById('sert-e').innerText = v[1];
 }
 
 function calcCoude(){
-let d=+document.getElementById('c-d').value;
-let a=document.getElementById('c-a').value;
-if(!d)return;
-let r=1.5*d;
-let res=a==90?Math.round(r):Math.round(r/2);
-document.getElementById('c-res').innerText=res;
+  const d = Number(document.getElementById('c-d').value);
+  const a = document.getElementById('c-a').value;
+  if(!d) return;
+  const r = 1.5*d;
+  document.getElementById('c-res').innerText =
+    a==="90" ? Math.round(r) : Math.round(r/2);
 }
 
 const bigData={
-iso:{h:["DN","Ø mm","Pouce","Ép mm"],d:[
-["DN15","21.3","1/2","2.0 / 2.6"],
-["DN25","33.7","1","2.6 / 3.2"],
-["DN50","60.3","2","2.9 / 3.6"],
-["DN100","114.3","4","3.6 / 4.5"]
-]},
-asme:{h:["NPS","Ø mm","Ø ″","Sch 10/40/80"],d:[
-["1","33.4","1","2.77 / 3.38 / 4.55"],
-["2","60.3","2","2.77 / 3.91 / 5.54"],
-["4","114.3","4","3.05 / 6.02 / 8.56"]
-]},
-inox:{h:["DN","Ø mm","Ép mm"],d:[
-["DN25","33.7","1.5 / 2.0"],
-["DN50","60.3","1.5 / 2.0"]
-]},
-cuivre:{h:["Ø ext","Ø int","Ép"],d:[
-["16","14","1"],
-["22","20","1"]
-]},
-bpe:{h:["OD ″","Ø mm","Ép"],d:[
-["1","25.4","1.65"],
-["2","50.8","1.65"]
-]}
+  iso:{h:["DN","Ø ext mm","Pouce","Ép mm"],d:[
+    ["DN15","21.3","1/2","2.0 / 2.6"],
+    ["DN25","33.7","1","2.6 / 3.2"],
+    ["DN50","60.3","2","2.9 / 3.6"],
+    ["DN100","114.3","4","3.6 / 4.5"]
+  ]},
+  asme:{h:["NPS","Ø mm","Ø ″","Sch 10/40/80"],d:[
+    ["1","33.4","1","2.77 / 3.38 / 4.55"],
+    ["2","60.3","2","2.77 / 3.91 / 5.54"],
+    ["4","114.3","4","3.05 / 6.02 / 8.56"]
+  ]},
+  inox:{h:["DN","Ø mm","Ép mm"],d:[
+    ["DN25","33.7","1.5 / 2.0"],
+    ["DN50","60.3","1.5 / 2.0"]
+  ]},
+  cuivre:{h:["Ø ext","Ø int","Ép"],d:[
+    ["16","14","1"],
+    ["22","20","1"]
+  ]},
+  bpe:{h:["OD ″","Ø mm","Ép"],d:[
+    ["1","25.4","1.65"],
+    ["2","50.8","1.65"]
+  ]}
 };
 
 function renderAbaque(){
-let n=sel-norme.value;
-thr.innerHTML=bigData[n].h.map(h=>`<th>${h}</th>`).join('');
-tbody.innerHTML=bigData[n].d.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');
+  const n=document.getElementById('sel-norme').value;
+  document.getElementById('thr').innerHTML =
+    bigData[n].h.map(h=>`<th>${h}</th>`).join('');
+  document.getElementById('tbody').innerHTML =
+    bigData[n].d.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('');
 }
 
 window.onload=calcSert;

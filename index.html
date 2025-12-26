@@ -3,144 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rabbit PipeFit Pro - Smart Calc</title>
+    <title>Rabbit PipeFit Pro - UltraPur & Sertinox</title>
     <style>
         :root { --orange: #ff4e00; --bg: #000; --card: #111; --text: #fff; }
         body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; overflow: hidden; }
         .header { background: #000; border-bottom: 2px solid var(--orange); padding: 8px; text-align: center; font-weight: bold; font-size: 0.9rem;}
         .tabs { display: flex; height: 45px; background: #111; border-bottom: 1px solid #333; }
-        .tab-btn { flex: 1; border: none; background: none; color: #666; font-size: 0.6rem; font-weight: bold; text-transform: uppercase; }
+        .tab-btn { flex: 1; border: none; background: none; color: #666; font-size: 0.55rem; font-weight: bold; text-transform: uppercase; }
         .tab-btn.active { color: var(--orange); border-bottom: 2px solid var(--orange); }
         .content { height: calc(100vh - 95px); overflow-y: auto; padding: 12px; box-sizing: border-box; }
-        .card { background: var(--card); border-radius: 12px; padding: 15px; border: 1px solid #333; margin-bottom: 15px; }
-        .label { font-size: 0.7rem; color: #888; text-transform: uppercase; margin-bottom: 8px; display: block;}
-        input, select { background: #222; border: 1px solid #444; color: white; padding: 12px; width: 100%; border-radius: 8px; font-size: 1.1rem; box-sizing: border-box; margin-bottom: 15px; }
-        .btn-calc { background: var(--orange); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 1rem; }
-        .res-value { font-size: 3rem; color: var(--orange); font-weight: bold; text-align: center; margin: 10px 0; }
-        .res-unit { font-size: 0.9rem; color: #ccc; text-align: center; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-        th { color: var(--orange); text-align: left; padding: 8px; border-bottom: 1px solid #333; }
-        td { padding: 8px; border-bottom: 1px solid #222; }
+        .card { background: var(--card); border-radius: 12px; padding: 12px; border: 1px solid #333; margin-bottom: 10px; }
+        .label { font-size: 0.65rem; color: #888; text-transform: uppercase; margin-bottom: 5px; display: block;}
+        input, select { background: #222; border: 1px solid #444; color: white; padding: 10px; width: 100%; border-radius: 8px; font-size: 0.9rem; margin-bottom: 8px; }
+        .btn-calc { background: var(--orange); color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; }
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .res-box { background: #000; border: 1px dashed var(--orange); padding: 10px; text-align: center; border-radius: 8px; }
+        .res-val { font-size: 1.5rem; color: var(--orange); font-weight: bold; display: block; }
+        .res-txt { font-size: 0.6rem; color: #888; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+        th { color: var(--orange); text-align: left; padding: 5px; border-bottom: 1px solid #333; }
+        td { padding: 5px; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
 
-    <div class="header">PIPEFIT PRO : CALC INTELLIGENTE</div>
+    <div class="header">PIPEFIT PRO : ULTRAPUR & SERTINOX</div>
     
     <div class="tabs">
-        <button id="t-dev" class="tab-btn active" onclick="showTab('dev')">Dévoiement</button>
-        <button id="t-coude" class="tab-btn" onclick="showTab('coude')">Coudes</button>
+        <button id="t-sert" class="tab-btn active" onclick="showTab('sert')">Sertinox</button>
+        <button id="t-pur" class="tab-btn" onclick="showTab('pur')">Dockweiler/Fitok</button>
         <button id="t-aba" class="tab-btn" onclick="showTab('aba')">Abaques</button>
     </div>
 
     <div class="content">
-        <div id="sec-dev">
+        <div id="sec-sert">
             <div class="card">
-                <span class="label">Plongée (mm)</span>
-                <input type="number" id="inp-plongee" placeholder="Ex: 300">
-                <button class="btn-calc" style="width:100%" onclick="calcDev()">CALCULER (45°)</button>
-                <div id="res-dev" class="res-value">---</div>
-                <div class="res-unit">Longueur du tube (mm)</div>
+                <span class="label">Diamètre Sertinox</span>
+                <select id="sel-sert" onchange="calcSert()">
+                    <option value="15,20">DN 15 (Ø18)</option>
+                    <option value="20,21">DN 20 (Ø22)</option>
+                    <option value="25,23">DN 25 (Ø28)</option>
+                    <option value="32,26">DN 32 (Ø35)</option>
+                    <option value="40,30">DN 40 (Ø42)</option>
+                    <option value="50,35">DN 50 (Ø54)</option>
+                </select>
+                <div class="res-grid">
+                    <div class="res-box"><span id="val-sert-axe" class="res-val">--</span><span class="res-txt">Cote Axe (mm)</span></div>
+                    <div class="res-box"><span id="val-sert-em" class="res-val">--</span><span class="res-txt">Emboîtement (mm)</span></div>
+                </div>
+                <div style="margin-top:10px; font-size:0.7rem; color:var(--orange); text-align:center">Cote de coupe = Cote Axe - Emboîtement</div>
             </div>
         </div>
 
-        <div id="sec-coude" style="display:none;">
+        <div id="sec-pur">
             <div class="card">
-                <span class="label">Type de Rayon</span>
-                <select id="sel-rayon">
-                    <option value="1.5">3D / Long Rayon (1.5D)</option>
-                    <option value="1">2D / Court Rayon (1D)</option>
-                    <option value="2.5">5D / Grand Rayon (2.5D)</option>
+                <span class="label">Diamètre Tube (Pouces)</span>
+                <select id="sel-pur" onchange="calcPur()">
+                    <option value="12.7,19.05,47.6">1/2" (OD 12.7)</option>
+                    <option value="19.05,28.58,47.6">3/4" (OD 19.05)</option>
+                    <option value="25.4,38.1,47.6">1" (OD 25.4)</option>
+                    <option value="38.1,57.15,70.0">1.5" (OD 38.1)</option>
+                    <option value="50.8,76.2,76.2">2" (OD 50.8)</option>
                 </select>
-
-                <span class="label">Diamètre du Tube (ISO)</span>
-                <select id="sel-diametre" onchange="calcCoude()">
-                    <option value="">-- Choisir un diamètre --</option>
-                    <option value="21.3">DN 15 (21.3 mm)</option>
-                    <option value="26.9">DN 20 (26.9 mm)</option>
-                    <option value="33.7">DN 25 (33.7 mm)</option>
-                    <option value="42.4">DN 32 (42.4 mm)</option>
-                    <option value="48.3">DN 40 (48.3 mm)</option>
-                    <option value="60.3">DN 50 (60.3 mm)</option>
-                    <option value="76.1">DN 65 (76.1 mm)</option>
-                    <option value="88.9">DN 80 (88.9 mm)</option>
-                    <option value="114.3">DN 100 (114.3 mm)</option>
-                    <option value="139.7">DN 125 (139.7 mm)</option>
-                    <option value="168.3">DN 150 (168.3 mm)</option>
-                    <option value="219.1">DN 200 (219.1 mm)</option>
-                </select>
-
-                <div id="res-coude" class="res-value">---</div>
-                <div class="res-unit">Encombrement Axe (mm)</div>
+                <div class="res-grid">
+                    <div class="res-box"><span id="val-pur-axe" class="res-val">--</span><span class="res-txt">Cote Axe (L)</span></div>
+                    <div class="res-box"><span id="val-pur-ext" class="res-val">--</span><span class="res-txt">Rayon Centre</span></div>
+                </div>
+                <p style="font-size:0.6rem; color:#666;">Cotes standards pour coudes à souder orbitalement (branches allongées).</p>
             </div>
         </div>
 
         <div id="sec-aba" style="display:none;">
-             <span class="label">Norme : ISO 4200 / Acier</span>
-             <div class="card" style="padding:0">
-                <table id="abaque-table">
-                    <thead><tr><th>DN</th><th>Ext mm</th><th>Pouce</th></tr></thead>
-                    <tbody id="abaque-body">
-                        </tbody>
+            <div class="card" style="padding:0">
+                <table>
+                    <thead><tr><th>Marque</th><th>Norme</th><th>Usage</th></tr></thead>
+                    <tbody>
+                        <tr><td>Dockweiler</td><td>ASME BPE</td><td>Ultra-Pur</td></tr>
+                        <tr><td>Fitok</td><td>6LV</td><td>Instrumentation</td></tr>
+                        <tr><td>Sertinox</td><td>EN 10312</td><td>Sertissage</td></tr>
+                        <tr><td>Swagelok</td><td>Gauge</td><td>Haute Pression</td></tr>
+                    </tbody>
                 </table>
-             </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const tubeData = [
-            ["15", "21.3", "1/2\""], ["20", "26.9", "3/4\""], ["25", "33.7", "1\""],
-            ["32", "42.4", "1\"1/4"], ["40", "48.3", "1\"1/2"], ["50", "60.3", "2\""],
-            ["65", "76.1", "2\"1/2"], ["80", "88.9", "3\""], ["100", "114.3", "4\""]
-        ];
-
         function showTab(t) {
-            ['sec-dev','sec-coude','sec-aba'].forEach(s => document.getElementById(s).style.display = 'none');
+            ['sec-sert','sec-pur','sec-aba'].forEach(s => document.getElementById(s).style.display = 'none');
             document.getElementById('sec-' + t).style.display = 'block';
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('t-' + t).classList.add('active');
         }
 
-        function calcDev() {
-            const v = document.getElementById('inp-plongee').value;
-            if(v) { 
-                const res = Math.round(v * 1.414);
-                document.getElementById('res-dev').innerText = res;
-                speak(res + " millimètres.");
-            }
+        function calcSert() {
+            const val = document.getElementById('sel-sert').value.split(',');
+            // val[0] = DN, val[1] = Profondeur emboîtement type
+            const axe = Math.round(val[0] * 1.5); // Approximation axe coude sertinox
+            document.getElementById('val-sert-axe').innerText = axe;
+            document.getElementById('val-sert-em').innerText = val[1];
         }
 
-        function calcCoude() {
-            const ext = document.getElementById('sel-diametre').value;
-            const rayonFactor = document.getElementById('sel-rayon').value;
-            if(ext) {
-                // Formule pro : Le rayon de courbure centre est souvent basé sur le DN nominal. 
-                // Pour simplifier l'encombrement axe à 90° :
-                // Encombrement = Facteur Rayon * Diamètre nominal approché
-                // Note : On utilise une logique de table pour être précis.
-                const res = Math.round(parseFloat(ext) * rayonFactor * 0.7); // Approximation chantier
-                // Pour être exact, on devrait utiliser le DN. Ici on fait une déduction :
-                let encombrement = 0;
-                const d = parseFloat(ext);
-                
-                // Calcul précis selon usage courant (Rayon = 1.5 * DN ou équivalent)
-                encombrement = Math.round(d * rayonFactor * 0.85); 
-                
-                document.getElementById('res-coude').innerText = encombrement;
-                speak("L'encombrement est de " + encombrement + " millimètres.");
-            }
+        function calcPur() {
+            const val = document.getElementById('sel-pur').value.split(',');
+            // val[1] = Rayon centre, val[2] = Cote L (Axe vers bout)
+            document.getElementById('val-pur-axe').innerText = val[2];
+            document.getElementById('val-pur-ext').innerText = val[1];
         }
 
-        function speak(text) {
-            if (typeof PluginMessageHandler !== 'undefined') {
-                PluginMessageHandler.postMessage(JSON.stringify({message: text, useLLM: false}));
-            }
-        }
-
-        window.onload = () => {
-            const body = document.getElementById('abaque-body');
-            body.innerHTML = tubeData.map(r => `<tr><td>${r[0]}</td><td style="color:var(--orange)">${r[1]}</td><td>${r[2]}</td></tr>`).join('');
-        };
+        window.onload = () => { calcSert(); calcPur(); };
     </script>
 </body>
 </html>
